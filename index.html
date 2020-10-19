@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Random Key</title>
+</head>
+<body>
+	<h1></h1>
+	<label>characters for key</label>
+	<input type="number" id="qtd" value="16">
+	<button onclick="generate()">Generate</button>
+	<input type="text" id="result" readonly="false">
+
+	<script>
+		function generate() {
+			let length =  document.getElementById("qtd").value;
+			let result = '';
+			let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+			let charactersLength = characters.length;
+			for ( var i = 0; i < length; i++ ) {
+				result += characters.charAt(Math.floor(Math.random() * charactersLength));
+			}
+			document.getElementById("result").value = result;
+			console.log(result);
+		}
+	</script>
+
+</body>
+</html>
