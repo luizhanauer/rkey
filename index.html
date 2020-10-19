@@ -2,13 +2,55 @@
 <html>
 <head>
 	<title>Random Key</title>
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
 </head>
 <body>
-	<h1>Random Key</h1>
-	<label>characters for key</label>
-	<input type="number" id="qtd" value="16">
-	<button onclick="generate()">Generate</button>
-	<input type="text" id="result" readonly="false">
+
+	<div class="container-fluid mt-4">
+		<div class="row justify-content-center">
+			<div class="col-md-4">
+				<div class="card card-frame">
+					<div class="card-header badge-dark">
+						Random Key
+					</div>
+					<div class=" card-body">
+						<hr class="my-4">
+						<h3 align="center">Random Key</h3>
+						<hr class="my-4">
+						<div class="row d-flex justify-content-center">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="qtd" class="form-control-label">Characters for key</label>
+									<input type="number" class="form-control" id="qtd" value="16">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="result" class="form-control-label">Your result</label>
+									<div class="form-group input-group">
+										<input type="text" class="form-control" id="result" readonly="false">
+										<div class="input-group-append">
+											<button class="btn btn-dark" data-clipboard-target="#result" data-toggle="tooltip" title="Copy">
+												<i class="fas fa-copy"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<button class="btn btn-dark" title="Generate" onclick="generate()">Generate</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script>
 		function generate() {
