@@ -33,7 +33,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="result" class="form-control-label">Your result</label>
+									<label for="result" class="form-control-label">Your Result</label> 
 									<div class="form-group input-group">
 										<input type="text" class="form-control" id="result" readonly="false">
 										<div class="input-group-append">
@@ -42,6 +42,26 @@
 											</button>
 										</div>
 									</div>
+										<label for="result" class="form-control-label">Your UPerCase</label>
+										<div class="form-group input-group">
+										<input type="text" class="form-control" id="resultUper" readonly="false">
+										<div class="input-group-append">
+											<button class="btn btn-dark" data-clipboard-target="#resultUper" data-toggle="tooltip" title="Copy">
+												<i class="fas fa-copy"></i>
+											</button>
+										</div>
+									</div>
+										<label for="result" class="form-control-label">Your Tiny</label>
+										<div class="form-group input-group">
+										<input type="text" class="form-control" id="resultTiny" readonly="false">
+										<div class="input-group-append">
+											<button class="btn btn-dark" data-clipboard-target="#resultTiny" data-toggle="tooltip" title="Copy">
+												<i class="fas fa-copy"></i>
+											</button>
+										</div>
+
+									</div>
+
 								</div>
 							</div>
 							<button class="btn btn-dark" title="Generate" onclick="generate()">Generate</button>
@@ -63,9 +83,24 @@
 			}
 			document.getElementById("result").value = result;
 			console.log(result);
-		}
+			
+			document.getElementById("resultUper").value = result.toUpperCase();
+			console.log(result);
 
-		// FAZER SCRIPT COPY 
+			document.getElementById("resultTiny").value = result.toLowerCase();
+			console.log(result);
+		}
+    
+		let clipboard = new ClipboardJS('.btn');
+
+		clipboard.on('success', function(e) {
+			console.log(e);
+		});
+
+		clipboard.on('error', function(e) {
+			console.log(e);
+		});
+
 	</script>
 
 </body>
