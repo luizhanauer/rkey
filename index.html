@@ -90,8 +90,8 @@
 			document.getElementById("resultTiny").value = result.toLowerCase();
 			console.log(result);
 		}
-
-		var clipboard = new ClipboardJS('.btn');
+    
+		let clipboard = new ClipboardJS('.btn');
 
 		clipboard.on('success', function(e) {
 			console.log(e);
@@ -100,6 +100,7 @@
 		clipboard.on('error', function(e) {
 			console.log(e);
 		});
+
 	</script>
 
 </body>
