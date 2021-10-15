@@ -2,79 +2,61 @@
 <html>
 <head>
 	<title>Random Key</title>
-	
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+	<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
 </head>
-<body>
+<body class="bg-gray-300" onload="generate();">
+	<div class="grid grid-cols-1 lg:grid-cols-2">
+		<div class="bg-gray-900 lg:min-h-screen lg:flex lg:items-center p-6 sm:p-12">
+			<div class="flex-grow">
+				<h1 class="text-white text-center text-2xl sm:text-5xl mb-2"> Random Key</h1>
+			</div>
+		</div>
 
-	<div class="container-fluid mt-4">
-		<div class="row justify-content-center">
-			<div class="col-md-4">
-				<div class="card card-frame">
-					<div class="card-header badge-dark">
-						Random Key
-					</div>
-					<div class=" card-body">
-						<hr class="my-4">
-						<h3 align="center">Random Key</h3>
-						<hr class="my-4">
-						<div class="row d-flex justify-content-center">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="qtd" class="form-control-label">Characters for key</label>
-									<input type="number" class="form-control" id="qtd" value="16">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="result" class="form-control-label">Your Result</label> 
-									<div class="form-group input-group">
-										<input type="text" class="form-control" id="result" readonly="false">
-										<div class="input-group-append">
-											<button class="btn btn-dark" data-clipboard-target="#result" data-toggle="tooltip" title="Copy">
-												<i class="fas fa-copy"></i>
-											</button>
-										</div>
-									</div>
-										<label for="result" class="form-control-label">Your UpperCase</label>
-										<div class="form-group input-group">
-										<input type="text" class="form-control" id="resultUpper" readonly="false">
-										<div class="input-group-append">
-											<button class="btn btn-dark" data-clipboard-target="#resultUpper" data-toggle="tooltip" title="Copy">
-												<i class="fas fa-copy"></i>
-											</button>
-										</div>
-									</div>
-										<label for="result" class="form-control-label">Your Tiny</label>
-										<div class="form-group input-group">
-										<input type="text" class="form-control" id="resultTiny" readonly="false">
-										<div class="input-group-append">
-											<button class="btn btn-dark" data-clipboard-target="#resultTiny" data-toggle="tooltip" title="Copy">
-												<i class="fas fa-copy"></i>
-											</button>
-										</div>
-
-									</div>
-
-								</div>
-							</div>
-							<button class="btn btn-dark" title="Generate" onclick="generate()">Generate</button>
-						</div>
+		<div class="lg:min-h-screen lg:flex lg:items-center p-12 lg:p-24 xl:p-48">
+			<div class="flex-grow bg-white shadow-xl rounded-md border border-gray-300 p-8">
+				<label class="font-bold text-gray-500" for="decimal">Tamanho da Chave</label>
+				<div class="flex items-center grid">
+					<div class="relative">
+						<input type="text" class="h-14 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none border bg-gray-50 w-full" placeholder="..." id="quantidade" name="quantidade" onkeyup="generate();" value="16">
 					</div>
 				</div>
+				<label class="font-bold text-gray-500" for="decimal">Mista</label>
+				<div class="flex items-center grid">
+					<div class="relative">
+						<input type="text" class="h-14 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none border bg-gray-50 w-full" placeholder="..." id="result" name="result" >
+						<div class="absolute top-2 right-2"> <button class="h-10 w-20 text-white rounded-lg bg-green-500 hover:bg-green-600 btn" data-clipboard-target="#result" data-toggle="tooltip" title="Copy"><i class="far fa-copy"></i> Copiar</button> </div>
+					</div>
+				</div>
+				<label class="font-bold text-gray-500" for="hexadecimal">Maiúscula</label>
+				<div class="flex items-center grid">
+					<div class="relative">
+						<input type="text" class="h-14 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none border bg-gray-50 w-full" placeholder="..." id="resultUpper" name="resultUpper">
+						<div class="absolute top-2 right-2"> <button class="h-10 w-20 text-white rounded-lg bg-green-500 hover:bg-green-600 btn" data-clipboard-target="#resultUpper" data-toggle="tooltip" title="Copy"><i class="far fa-copy"></i> Copiar</button> </div>
+					</div>
+				</div>
+				<label class="font-bold text-gray-500" for="binario">Minúscula</label>
+				<div class="flex items-center grid">
+					<div class="relative">
+						<input type="text" class="h-14 pl-10 pr-20 rounded-lg z-0 focus:shadow focus:outline-none border bg-gray-50 w-full" placeholder="..." id="resultTiny" name="resultTiny">
+						<div class="absolute top-2 right-2"> <button class="h-10 w-20 text-white rounded-lg bg-green-500 hover:bg-green-600 btn" data-clipboard-target="#resultTiny" data-toggle="tooltip" title="Copy"><i class="far fa-copy"></i> Copiar</button> </div>
+					</div>
+				</div>
+				<div class="flex items-center grid p-8">
+					<div class="flex items-center">
+						<button class="h-10 w-full text-white rounded-lg bg-gray-700 hover:bg-gray-800 btn" title="Nova Chave" onclick="generate();">Nova Chave</button>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
 
 	<script>
 		function generate() {
-			let length =  document.getElementById("qtd").value;
+			let length =  document.getElementById("quantidade").value;
 			let result = '';
 			let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 			let charactersLength = characters.length;
@@ -90,11 +72,12 @@
 			document.getElementById("resultTiny").value = result.toLowerCase();
 			console.log(result);
 		}
-    
+
 		let clipboard = new ClipboardJS('.btn');
 
 		clipboard.on('success', function(e) {
 			console.log(e);
+			alert('Copiado para área de transferência!');
 		});
 
 		clipboard.on('error', function(e) {
