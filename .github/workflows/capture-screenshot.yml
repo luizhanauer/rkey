@@ -1,0 +1,59 @@
+name: Generate Portfolio Screenshot
+on: 
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Main (para pegar o script)
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install playwright
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Take Screenshot
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            await page.setViewportSize({ width: 1280, height: 720 });
+            // Aqui ele acessa a URL do seu repositório (homepage configurada no GitHub)
+            await page.goto('${{ github.event.repository.homepage }}' || 'https://github.com/${{ github.repository }}');
+            await page.waitForTimeout(2000); // Espera o conteúdo carregar/animações
+            await page.screenshot({ path: 'screenshot.png' });
+            await browser.close();
+          })();
+          "
+
+      - name: Upload to Assets Branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Tenta dar checkout na branch assets, se não existir, cria como órfã
+          git fetch origin assets || true
+          if git checkout assets; then
+            git pull origin assets
+          else
+            git checkout --orphan assets
+            git rm -rf .
+          fi
+          
+          # Move a imagem gerada para o diretório
+          git add screenshot.png
+          git commit -m "update project screenshot"
+          git push origin assets --force
