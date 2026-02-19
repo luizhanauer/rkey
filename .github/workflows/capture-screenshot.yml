@@ -24,12 +24,12 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
+      # Alterado para a pasta public do Vite
       - name: Create Assets Directory
-        run: mkdir -p static/assets
+        run: mkdir -p public/assets
 
       - name: Take Screenshots
         env:
-          # Define a URL alvo via variável de ambiente para manter o JS limpo
           TARGET_URL: ${{ github.event.repository.homepage || format('https://github.com/{0}', github.repository) }}
         run: |
           node -e "
@@ -40,16 +40,15 @@ jobs:
             
             console.log('🌐 Acessando:', process.env.TARGET_URL);
             await page.goto(process.env.TARGET_URL);
-            await page.waitForTimeout(2000); // Espera o conteúdo carregar/animações
+            await page.waitForTimeout(2000); 
 
-            // Função helper para aplicar DRY na captura de telas
             const takeShot = async (width, height, filename) => {
               console.log(\`📸 Capturando \${width}x\${height} -> \${filename}\`);
               await page.setViewportSize({ width, height });
-              await page.screenshot({ path: \`static/assets/\${filename}\` });
+              // Salvando diretamente na pasta public/assets/ do Vite
+              await page.screenshot({ path: \`public/assets/\${filename}\` });
             };
 
-            // Captura as duas resoluções solicitadas
             await takeShot(1280, 720, 'screenshot.png');
             await takeShot(1280, 520, 'screenshot_featured.png');
 
@@ -62,8 +61,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Adiciona as imagens geradas na pasta static
-          git add static/assets/
+          # Mapeando para o diretório correto do Vue/Vite
+          git add public/assets/
           
-          # Lógica de verificação: só commita se houve mudança visual real na imagem
           git diff --staged --quiet || (git commit -m "chore(assets): atualizar screenshots do projeto [skip ci]" && git push origin main)
