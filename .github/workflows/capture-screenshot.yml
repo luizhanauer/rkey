@@ -1,4 +1,5 @@
-name: Generate Portfolio Screenshot
+name: Generate Portfolio Screenshots
+
 on: 
   workflow_dispatch:
 
@@ -9,7 +10,7 @@ jobs:
   screenshot:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Main (para pegar o script)
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -23,37 +24,46 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Take Screenshot
+      - name: Create Assets Directory
+        run: mkdir -p static/assets
+
+      - name: Take Screenshots
+        env:
+          # Define a URL alvo via variável de ambiente para manter o JS limpo
+          TARGET_URL: ${{ github.event.repository.homepage || format('https://github.com/{0}', github.repository) }}
         run: |
           node -e "
           const { chromium } = require('playwright');
           (async () => {
             const browser = await chromium.launch();
             const page = await browser.newPage();
-            await page.setViewportSize({ width: 1280, height: 720 });
-            // Aqui ele acessa a URL do seu repositório (homepage configurada no GitHub)
-            await page.goto('${{ github.event.repository.homepage }}' || 'https://github.com/${{ github.repository }}');
+            
+            console.log('🌐 Acessando:', process.env.TARGET_URL);
+            await page.goto(process.env.TARGET_URL);
             await page.waitForTimeout(2000); // Espera o conteúdo carregar/animações
-            await page.screenshot({ path: 'screenshot.png' });
+
+            // Função helper para aplicar DRY na captura de telas
+            const takeShot = async (width, height, filename) => {
+              console.log(\`📸 Capturando \${width}x\${height} -> \${filename}\`);
+              await page.setViewportSize({ width, height });
+              await page.screenshot({ path: \`static/assets/\${filename}\` });
+            };
+
+            // Captura as duas resoluções solicitadas
+            await takeShot(1280, 720, 'screenshot.png');
+            await takeShot(1280, 520, 'screenshot_featured.png');
+
             await browser.close();
           })();
           "
 
-      - name: Upload to Assets Branch
+      - name: Commit and Push to Main
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Tenta dar checkout na branch assets, se não existir, cria como órfã
-          git fetch origin assets || true
-          if git checkout assets; then
-            git pull origin assets
-          else
-            git checkout --orphan assets
-            git rm -rf .
-          fi
+          # Adiciona as imagens geradas na pasta static
+          git add static/assets/
           
-          # Move a imagem gerada para o diretório
-          git add screenshot.png
-          git commit -m "update project screenshot"
-          git push origin assets --force
+          # Lógica de verificação: só commita se houve mudança visual real na imagem
+          git diff --staged --quiet || (git commit -m "chore(assets): atualizar screenshots do projeto [skip ci]" && git push origin main)
